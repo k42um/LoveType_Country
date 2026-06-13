@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1140"/>
+      <stop offset="1" stop-color="#0c0a1d"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.2" cy="0.2" r="0.6">
+      <stop offset="0" stop-color="#ff5f8f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff5f8f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.85" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd1e0"/>
+      <stop offset="0.5" stop-color="#ffb3c8"/>
+      <stop offset="1" stop-color="#d8c4ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <text x="600" y="150" text-anchor="middle" font-size="80">💘</text>
+
+  <text x="600" y="190" text-anchor="middle" fill="#ffffff" fill-opacity="0.65"
+        font-family="sans-serif" font-size="30" font-weight="600">
+    20の質問でわかる ・ 全16カ国
+  </text>
+
+  <text x="600" y="300" text-anchor="middle" fill="url(#title)"
+        font-family="sans-serif" font-size="92" font-weight="900">
+    あなたの恋は
+  </text>
+  <text x="600" y="410" text-anchor="middle" fill="url(#title)"
+        font-family="sans-serif" font-size="92" font-weight="900">
+    「どの国」タイプ？
+  </text>
+
+  <text x="600" y="500" text-anchor="middle" fill="#ffffff" fill-opacity="0.8"
+        font-family="sans-serif" font-size="34" font-weight="500">
+    長所も短所も、相性のいい国・悪い国まで丸わかり
+  </text>
+
+  <text x="600" y="585" text-anchor="middle" font-size="46" letter-spacing="6">
+    🇪🇸 🇮🇹 🇯🇵 🇰🇷 🇺🇸 🇧🇷 🇩🇪 🇬🇧
+  </text>
+</svg>
