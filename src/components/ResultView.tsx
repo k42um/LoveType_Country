@@ -19,10 +19,10 @@ interface Props {
   code: string; // ユーザー自身のタイプ
   percents: Record<Axis, number> | null;
   onRestart: () => void;
-  onPeek?: (code: string) => void; // 互換性のため受け取るが内部peekを使用
+  onCompat: () => void; // 相性診断へ
 }
 
-export default function ResultView({ code, percents, onRestart }: Props) {
+export default function ResultView({ code, percents, onRestart, onCompat }: Props) {
   // 相性国を覗いている時は peek にコードが入る (null=自分の結果)
   const [peek, setPeek] = useState<string | null>(null);
   const isOwn = peek === null;
@@ -46,6 +46,17 @@ export default function ResultView({ code, percents, onRestart }: Props) {
       )}
 
       <Card t={display} isOwn={isOwn} percents={isOwn ? percents : null} />
+
+      {isOwn && (
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onCompat}
+          className="mt-6 w-full rounded-2xl bg-gradient-to-r from-pink-500 to-violet-500 py-4 text-base font-bold shadow-[0_10px_30px_-8px_rgba(236,72,153,0.7)]"
+        >
+          💞 気になる人との相性を診断する
+        </motion.button>
+      )}
 
       <MatchSection t={display} onPeek={setPeek} />
 

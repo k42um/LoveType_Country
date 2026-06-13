@@ -14,8 +14,18 @@ import {
 import { readTypeFromUrl } from "./lib/share";
 import ResultView from "./components/ResultView";
 import FlightTransition from "./components/FlightTransition";
+import CompatFlight from "./components/CompatFlight";
+import { CompatResult, CompatSetup } from "./components/Compatibility";
+import type { Gender } from "./data/compatibility";
 
-type Screen = "landing" | "quiz" | "flight" | "result";
+type Screen =
+  | "landing"
+  | "quiz"
+  | "flight"
+  | "result"
+  | "compatSetup"
+  | "compatFlight"
+  | "compatResult";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("landing");
@@ -25,6 +35,9 @@ export default function App() {
   // 出題セット。アクセスごとにランダム(30問→各軸5問ずつ20問・順序もシャッフル)。
   // 「もう一度診断する」で再抽選するため state で保持する。
   const [quiz, setQuiz] = useState<Question[]>(() => buildQuiz());
+  // 相性診断のお相手
+  const [partnerCode, setPartnerCode] = useState<string | null>(null);
+  const [partnerGender, setPartnerGender] = useState<Gender | null>(null);
 
   // 共有リンク (?type=XXXX) で開いた場合は結果から表示
   useEffect(() => {
@@ -109,7 +122,37 @@ export default function App() {
               code={resultCode}
               percents={percents}
               onRestart={restart}
-              onPeek={setResultCode}
+              onCompat={() => setScreen("compatSetup")}
+            />
+          )}
+          {screen === "compatSetup" && resultCode && (
+            <CompatSetup
+              key="compatSetup"
+              selfCode={resultCode}
+              onBack={() => setScreen("result")}
+              onSubmit={(code, gender) => {
+                setPartnerCode(code);
+                setPartnerGender(gender);
+                setScreen("compatFlight");
+              }}
+            />
+          )}
+          {screen === "compatFlight" && resultCode && partnerCode && (
+            <CompatFlight
+              key="compatFlight"
+              selfCode={resultCode}
+              partnerCode={partnerCode}
+              onComplete={() => setScreen("compatResult")}
+            />
+          )}
+          {screen === "compatResult" && resultCode && partnerCode && partnerGender && (
+            <CompatResult
+              key="compatResult"
+              selfCode={resultCode}
+              partnerCode={partnerCode}
+              gender={partnerGender}
+              onAgain={() => setScreen("compatSetup")}
+              onBack={() => setScreen("result")}
             />
           )}
         </AnimatePresence>
