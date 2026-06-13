@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   AXIS_LABELS,
   getType,
   type Axis,
   type LoveType,
 } from "../data/diagnosis";
+import { COUNTRY_INFO } from "../data/countryInfo";
 import {
   buildShareUrl,
   copyToClipboard,
@@ -137,7 +138,107 @@ function Card({
           <h3 className="mb-1 text-xs font-bold text-white/60">恋愛スタイル</h3>
           <p className="text-sm font-medium text-white/90">{t.loveStyle}</p>
         </div>
+
+        <CountryFacts t={t} />
       </div>
+    </div>
+  );
+}
+
+function CountryFacts({ t }: { t: LoveType }) {
+  const [open, setOpen] = useState(false);
+  const info = COUNTRY_INFO[t.code];
+  if (!info) return null;
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-left text-sm font-bold backdrop-blur transition-colors hover:bg-white/10"
+      >
+        <span>🌍 {t.country}という国をもっと知る</span>
+        <motion.span animate={{ rotate: open ? 180 : 0 }} className="text-white/60">
+          ▾
+        </motion.span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-3 space-y-4 rounded-2xl bg-black/20 p-4">
+              {/* 基本情報 */}
+              <div className="grid grid-cols-2 gap-3">
+                <FactChip icon="🏛️" label="首都" value={info.capital} />
+                <FactChip icon="🗣️" label="言語" value={info.language} />
+              </div>
+
+              {/* 愛してる */}
+              <div
+                className="rounded-2xl px-4 py-3 text-center text-white"
+                style={{
+                  background: `linear-gradient(135deg, ${t.gradient.from}, ${t.gradient.to})`,
+                }}
+              >
+                <p className="text-xs font-medium text-white/85">
+                  {info.language.split("・")[0]}で「愛してる」
+                </p>
+                <p className="mt-1 text-2xl font-black drop-shadow">
+                  {info.loveWord.text}
+                </p>
+                <p className="text-sm text-white/85">{info.loveWord.reading}</p>
+              </div>
+
+              <FactRow icon="💕" title="恋愛・デート文化" body={info.dateCulture} />
+              <FactRow icon="📍" title="ロマンチックな名所" body={info.spot} />
+              <FactRow icon="💡" title="豆知識" body={info.trivia} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function FactChip({
+  icon,
+  label,
+  value,
+}: {
+  icon: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-xl bg-white/5 px-3 py-2">
+      <p className="text-[10px] font-bold text-white/50">
+        {icon} {label}
+      </p>
+      <p className="text-sm font-semibold text-white/90">{value}</p>
+    </div>
+  );
+}
+
+function FactRow({
+  icon,
+  title,
+  body,
+}: {
+  icon: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div>
+      <h4 className="mb-1 text-xs font-bold text-white/60">
+        {icon} {title}
+      </h4>
+      <p className="text-sm leading-relaxed text-white/85">{body}</p>
     </div>
   );
 }

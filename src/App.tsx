@@ -13,8 +13,9 @@ import {
 } from "./data/diagnosis";
 import { readTypeFromUrl } from "./lib/share";
 import ResultView from "./components/ResultView";
+import FlightTransition from "./components/FlightTransition";
 
-type Screen = "landing" | "quiz" | "result";
+type Screen = "landing" | "quiz" | "flight" | "result";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("landing");
@@ -52,7 +53,8 @@ export default function App() {
       setResultCode(code);
       // 結果はクリーンなURLに反映（共有しやすく）
       window.history.replaceState(null, "", `?type=${code}`);
-      setScreen("result");
+      // 結果発表の前にフライト演出をはさむ
+      setScreen("flight");
     }
   };
 
@@ -92,6 +94,13 @@ export default function App() {
               currentValue={answers[quiz[step].id]}
               onAnswer={answer}
               onBack={back}
+            />
+          )}
+          {screen === "flight" && resultCode && (
+            <FlightTransition
+              key="flight"
+              code={resultCode}
+              onComplete={() => setScreen("result")}
             />
           )}
           {screen === "result" && resultCode && (
